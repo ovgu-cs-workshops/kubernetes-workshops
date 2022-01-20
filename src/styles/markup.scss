@@ -1,0 +1,235 @@
+b, strong {
+  font-weight: bold
+}
+
+i, em {
+  font-style: italic
+}
+
+p {
+  margin-top: 0.67em;
+}
+
+small {
+  font-size: 66.67%;
+}
+
+large {
+  font-size: 200%;
+}
+
+pre {
+  font-family: "Roboto Mono";
+  color: rgba($text-color, 0.75);
+  font-size: 75%;
+  background: rgba($text-color, 0.04);
+  display: block;
+  padding: .25em 1em;
+  margin: 0.2em 0;
+  white-space: pre;
+}
+
+code {
+  font-family: "Roboto Mono";
+  color: rgba($text-color, 0.75);
+  font-size: 75%;
+  background: rgba($text-color, .04);
+  display: inline-block;
+  padding: 0.25em 0.5em;
+  white-space: pre;
+}
+
+a {
+  color: #f05133;
+  text-decoration: none;
+  padding: 0 0.1em;
+  background: rgba(255,255,255,0.5);
+  text-shadow: -1px -1px 2px rgba(100,100,100,0.9);
+  border-radius: 0.2em;
+  transition: 0.5s;
+}
+
+a:hover, a:focus {
+  background: rgba(255,255,255,1);
+  text-shadow: -1px -1px 2px rgba(100,100,100,0.5);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  //padding-top: 1.5em;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 200%;
+}
+
+h2 {
+  font-size: 125%;
+}
+
+h3 {
+  font-size: 90%;
+  color: rgba($text-color, 0.666);
+}
+
+q, quote {
+  background: #eee;
+  padding: 0.5em;
+  margin: 1em 0;
+  border-left: 0.5em solid lightblue;
+}
+
+ul {
+  margin: 0;
+}
+
+figcaption {
+  font-size: 66.67%;
+  font-style: italic;
+  padding: 0 1em;
+}
+
+blockquote {
+  border-left: 0.5em solid #f05133;
+  background: lighten(#f05133, 40%);
+  padding: 0.5em 1em;
+  font-size: 75%;
+}
+
+.left {
+  text-align: left;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+.block {
+  display: block;
+}
+
+.columns {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rows {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin layout() {
+  display: grid;
+  justify-items: stretch;
+  align-items: stretch;
+  justify-content: stretch;
+  align-content: stretch;
+  height: 100%;
+  grid-gap: 0.5em 0.5em;
+}
+
+.layout {
+  &-centering {
+    align-self: center;
+    justify-self: center;
+  }
+  &-y-centering {
+    align-self: center;
+  }
+  &-x-centering {
+    justify-self: center;
+  }
+  &-bottom2 {
+    grid-area: bottom-left / span 2;
+  }
+  &-left {
+    grid-area: left;
+  }
+
+  &-center {
+    grid-area: center;
+  }
+
+  &-center-top {
+    grid-area: center-top;
+  }
+
+  &-center-bottom {
+    grid-area: center-bottom;
+  }
+
+  &-right {
+    grid-area: right;
+  }
+
+  &-top-left {
+    grid-area: top-left;
+  }
+
+  &-top-right {
+    grid-area: top-right;
+  }
+
+  &-bottom-left {
+    grid-area: bottom-left;
+  }
+
+  &-bottom-right {
+    grid-area: bottom-right;
+  }
+
+  &-1 {
+    @include layout();
+    grid-template-areas:
+      "center";
+  }
+
+  &-2 {
+    @include layout();
+    grid-template-areas:
+      "center-top"
+      "center-bottom";
+  }
+
+  &-1x1 {
+    @include layout();
+    grid-auto-columns: 1fr;
+    grid-template-areas:
+      "left right";
+  }
+
+  &-1x1x1 {
+    @include layout();
+    grid-auto-columns: 1fr;
+    grid-template-areas:
+      "left center right";
+  }
+
+  &-1x2 {
+    @include layout();
+    grid-template-areas:
+      "left top-right"
+      "left bottom-right";
+  }
+
+  &-2x1 {
+    @include layout();
+    grid-template-areas:
+      "top-left right"
+      "bottom-left right";
+  }
+
+  &-2x2 {
+    @include layout();
+    grid-template-areas:
+      "top-left top-right"
+      "bottom-left bottom-right";
+  }
+}

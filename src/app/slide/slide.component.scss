@@ -1,0 +1,115 @@
+.step {
+  font-family: 'Open Sans', Arial, sans-serif;
+  line-height: 1.5;
+  width: 1920px;
+  height: 1080px;
+  font-size: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  align-content: stretch;
+  position: relative;
+  transition: transform 1s;
+
+  &.overview {
+    z-index: -1;
+  }
+
+  > header {
+    flex: 0 1 auto;
+    padding: 0 2em;
+  }
+
+  > main {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0 2em;
+  }
+
+  > footer {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: row;
+    opacity: 0.5;
+    font-size: 66.67%;
+    flex: 0 1 auto;
+    padding: 1em 4em;
+
+    img {
+      height: 1.5em;
+      padding-right: 1em;
+    }
+
+    * {
+      vertical-align: bottom;
+    }
+
+    section.left {
+      flex: 1 1 0;
+      order: 1;
+    }
+
+    section.center {
+      flex: 1 1 0;
+      order: 2;
+    }
+
+    section.right {
+      flex: 1 1 0;
+      order: 3;
+    }
+
+    section.banner {
+      position: relative;
+      margin: 0 -2em;
+    }
+  }
+}
+
+.step.cornered::before,
+.step.cornered::after,
+.step.cornered > .corners::before,
+.step.cornered > .corners::after {
+    content: "";
+    position: absolute;
+    border-color: #316ce6;
+    border-style: solid;
+    border-width: 0;
+    width: 0.5em;
+    height: 0.5em;
+}
+
+.step.cornered::before {
+    top: 0;
+    left: 0;
+    border-top-width: 0.5em;
+    border-left-width: 0.5em;
+    width: 1em;
+    height: 1em;
+}
+
+.step.cornered::after {
+    top: 0;
+    right: 0;
+    border-top-width: 0.5em;
+    border-right-width: 0.5em;
+}
+
+.step.cornered > .corners::before {
+    bottom: 0;
+    right: 0;
+    border-bottom-width: 0.5em;
+    border-right-width: 0.5em;
+    width: 1em;
+    height: 1em;
+}
+
+.step.cornered > .corners::after {
+    bottom: 0;
+    left: 0;
+    border-bottom-width: 0.5em;
+    border-left-width: 0.5em;
+}

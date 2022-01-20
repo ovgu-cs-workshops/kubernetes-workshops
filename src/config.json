@@ -1,0 +1,5 @@
+{
+  "endpoint":"wss://example-presentation.rocks",
+  "realm":"dockertalk",
+  "interactionLink":"https://example-tty.rocks"
+}

@@ -1,0 +1,490 @@
+<chapter>
+  <slide
+    title="Kubernetes &amp; Orchestration"
+    [titleLarge]="true"
+  >
+    <div class="layout-1x1">
+      <div class="layout-left">
+        <h3>
+          Martin Koppehel
+          <br>
+          Jasper Orschulko
+        </h3>
+      </div>
+
+      <div class="layout-right" style="align-self: center;">
+        <img width="600" src="https://github.com/kubernetes/kubernetes/raw/master/logo/logo.png">
+      </div>
+    </div>
+  </slide>
+
+  <slide title="Agenda">
+    <div class="layout-1">
+      <ul>
+        <li>Introduction</li>
+        <li>Basics - Orchestration</li>
+          <ul>
+            <li>Containers, OCI, Kubernetes</li>
+          </ul>
+        <li>Kubernetes</li>
+            <ul>
+              <li>Basic Concepts</li>
+              <li>Basic Objects</li>
+              <li>High Level Concepts</li>
+              <li>Extensibility</li>
+            </ul>
+        <li>Helm - manage complex applications</li>
+        <li>Outlook - Advanced</li>
+      </ul>
+    </div>
+  </slide>
+</chapter                                                                                                                                                                                                                                                                                                                                                                                                                                              >
+
+<chapter title="Introduction: Orchestration">
+  <slide
+    title="Why that?">
+    <div class="layout-1x1">
+      <ul class="layout-left layout-y-centering">
+        <li>Containers are limited to a single machine</li>
+        <li>What if it fails?</li>
+          <ul><li>Well...</li></ul>
+        <li>Scaling?</li>
+        <li>High Availability?</li>
+        <li>Clusters!</li>
+        <li>Orchestration!</li>
+      </ul>
+      <div class="layout-right layout-centering">
+        <img width="600" src="./assets/dockerprod.gif">
+      </div>
+    </div>
+  </slide>
+</chapter>
+<chapter title="Basics">
+  <slide
+    title="What is orchestration really?">
+    <div class="layout-1">
+      <ul class="layout-y-centering">
+        <li>Orchestration is a way to manage and combine small services to a whole application</li>
+        <li>Orchestration is built upon a central software (orchestrator) that manages the services</li>
+        <li>A good orchestrator solves more challanges</li>
+          <ul>
+            <li>Distributing configuration and secrets</li>
+            <li>React to failures of a machine</li>
+            <li>Adapt outer world to current state of infrastructure</li>
+          </ul>
+      </ul>
+    </div>
+  </slide>
+  <slide
+    title="Examples of orchestrators">
+    <div class="layout-1">
+      <ul class="layout-y-centering">
+        <li>zookeeper (Apache)</li>
+        <li>docker swarm</li>
+        <li>systemd fleet</li>
+        <li>borg (kubernetes predecessor)</li>
+        <li>kubernetes</li>
+      </ul>
+    </div>
+  </slide>
+  <slide title="kubernetes">
+    <div class="layout-1">
+      <ul class="layout-y-centering">
+        <li>de-facto industry-standard orchestration for small to large scale clusters</li>
+        <li>state-based approach</li>
+        <li>no single point of failure, all components are replicated</li>
+        <li>extensible, flexible</li>
+        <li>Works with all large cloud providers or baremetal</li>
+        <li>kubernetes interfaces with containers and runtimes based on OCI, CRI, CNI specifications</li>
+      </ul>
+    </div>
+  </slide>
+</chapter>
+
+<chapter title="kubernetes">
+  <slide title="Components Overview">
+    <div class="layout-1">
+      <img src="https://raw.githubusercontent.com/kubernetes/website/main/static/images/docs/components-of-kubernetes.svg">
+    </div>
+  </slide>
+  <slide title="Declarative Management">
+    <div class="layout-1x1">
+      <ul class="layout-left layout-y-centering">
+        <li>kubernetes object specify the <b>desired</b> state</li>
+        <li>kubernetes takes care to match the desired state</li>
+        <li>reacting to changes and failures, adapting the workload</li>
+        <li>done via reconcile loop in the controller-manager</li>
+      </ul>
+      <img class="layout-right layout-centering" height="550" src="https://developers.redhat.com/sites/default/files/styles/article_floated/public/operator-reconciliation-kube-only.png">
+    </div>
+  </slide>
+  <slide title="Manifests">
+    <div class="layout-1x1">
+      <ul class="layout-left layout-y-centering" style="width:900px">
+        <li>Objects are specified in YAML files, called manifests</li>
+        <li>Type is specified by apiVersion and kind</li>
+        <li>Every object has metadata: name, labels, etc</li>
+        <li>Most objects have a spec (content)</li>
+        <li>Labels and Annotations can be attached to <b>all</b> objects</li>
+        <li>Labels can be used to query for objects
+      </ul>
+      <pre class="layout-right" style="width:100%">
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-namespace
+  labels:
+    department: devops
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-service
+  namespace: test-namespace
+spec:
+  kind: ClusterIP</pre>
+    </div>
+  </slide>
+  <slide title="Interacting with kubernetes">
+    <div class="layout-1x1">
+      <ul class="layout-left">
+        <li>Interaction only with the <b>apiserver</b>, including internal components</li>
+        <li>Manual interaction with kubernetes by using <b>kubectl</b>.
+        <li>Create/Update resources from a file: <pre>$ kubectl apply -f FILE</pre></li>
+        <li>Shows details for an object:<br><pre>$ kubectl describe OBJECTKIND NAME
+-n NAMESPACE</pre></li>
+      </ul>
+      <tty class="layout-right"></tty>
+    </div>
+  </slide>
+  <slide title="Higher level interaction">
+    <div class="layout-1">
+      <ul>
+        <li>Every tool can interact with kubernetes apiserver</li>
+        <li>kubernetes dashboard</li>
+        <li>VSCode kubernetes integration</li>
+        <li>helm</li>
+        <li>argo</li>
+        <li><b>k9s</b></li>
+      </ul>
+    </div>
+  </slide>
+  <slide title="Higher level interaction - k9s">
+    <div class="layout-1">
+      <tty></tty>
+    </div>
+  </slide>
+</chapter>
+
+<chapter title="kubernetes objects">
+  <slide title="The Pod">
+    <div class="layout-1x1">
+      <ul class="layout-left layout-y-centering" style="width:900px">
+        <li>Pod is the basic workload to run in kubernetes</li>
+        <li>Think of it like a container on steroids</li>
+        <li>Pods group several coupled containers</li>
+        <li>Pods specify environment and storage</li>
+        <li>Pods can specify location constraints</li>
+        <li>Pods should have resource limits</li>
+        <li>Containers in a pod share their namespaces (Network, IPC, PID)</li>
+      </ul>
+      <pre class="layout-right" style="width:100%">
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+  labels:
+    app: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.21
+    env:
+    - name: TEST_ENV
+      value: TEST_VALUE</pre>
+    </div>
+  </slide>
+
+  <slide title="The Service">
+    <div class="layout-1x1">
+      <ul class="layout-left layout-y-centering" style="width:900px">
+        <li>Services group one or more pods by a DNS name</li>
+        <li>A service can be reached by pods by its name</li>
+        <li>If in a different namespace, name.namespace</li>
+        <li>Pods are targeted by a set of labels</li>
+        <li>Several types supported:</li>
+        <li>ClusterIP, NodePort, LoadBalancer</li>
+        <li>Valid targets are <b>only</b> pods with Ready-Status
+      </ul>
+      <pre class="layout-right" style="width:100%;">
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-service
+spec:
+  selector:
+    app: nginx
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80</pre>
+    </div>
+  </slide>
+  <slide title="kubernetes networking model">
+    <div class="layout-1x1" style="grid-template-columns: 3fr 2fr;">
+      <ul class="layout-left layout-y-centering" style="width: auto;">
+        <li>CNI to connect pods with each other</li>
+        <li>transparent underlay network between all cluster nodes (single L3 segment)</li>
+        <li>Pods and Services are assigned an IP from different Subnets</li>
+        <li>Requests to a service IP are forwarded to Pod IPs</li>
+        <li>Advanced networking use cases possible with different CNI plugins</li>
+      </ul>
+      <img src="./assets/k8s-networking.svg" height="750" class="layout-right layout-y-centering">
+    </div>
+  </slide>
+  <slide title="The ConfigMap">
+    <div class="layout-1x1">
+      <ul class="layout-left layout-y-centering" style="width:900px">
+        <li>ConfigMaps store data that is not a secret</li>
+        <li>Contains files or string data</li>
+        <li>ConfigMaps can be mounted in a pod</li>
+        <li>Environment variables can be populated by ConfigMaps</li>
+        <li>Pods are not restarted when an underlying ConfigMap changes!</li>
+      </ul>
+      <pre class="layout-right" style="width:100%">
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test-configmap
+data:
+  TEST_ENV: "TEST_VALUE"
+---
+env: # in a pods 'env'
+- name: TEST_ENV
+  valueFrom:
+    configMapKeyRef:
+      name: test-configmap
+      key: TEST_ENV
+</pre>
+    </div>
+  </slide>
+  <slide title="The Secret">
+    <div class="layout-1x1">
+      <ul class="layout-left layout-y-centering" style="width:900px">
+        <li>Secrets are like config map for 'secret' data</li>
+        <li>Secret data is stored base64 encoded in etcd</li>
+        <li>Secret values are blinded everytime they would be printed in normal use</li>
+        <li>Consume like ConfigMaps</li>
+        <li>Secret data is updated in pods when mounted!</li>
+        <li>Use case: in-cluster credentials, TLS certificates, etc.</li>
+      </ul>
+      <pre class="layout-right" style="width:100%">
+apiVersion: v1
+kind: Secret
+metadata:
+  name: test-secret
+stringData: # instead of data
+  TEST_ENV: "TEST_VALUE"
+---
+env: # in a pods 'env'
+- name: TEST_ENV
+  valueFrom:
+    secretKeyRef:
+      name: test-configmap
+      key: TEST_ENV
+</pre>
+    </div>
+  </slide>
+
+  <slide title="The Deployment">
+    <div class="layout-1x1">
+      <ul class="layout-left layout-y-centering">
+        <li>Deployments manage pods</li>
+        <li>Can target a specific number of replicas</li>
+        <li>Orchestrate zero-downtime updates between versions</li>
+        <li>Save history for downgrades/config changes</li>
+        <li>Can have specific scheduling constraints</li>
+      </ul>
+      <pre class="layout-right" style="overflow-y:scroll;">
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.21
+        ports:
+        - containerPort: 80
+      </pre>
+    </div>
+  </slide>
+  <slide title="The DaemonSet">
+    <div class="layout-1x1">
+      <ul class="layout-left layout-y-centering">
+        <li>DaemonSets run pods on subsets of nodes</li>
+        <li>useful for e.g. ingress gateways</li>
+        <li>Nodes to select is specified via nodeSelector</li>
+        <li>Useful for management, monitoring, hardware etc.</li>
+        <li>Example: run an nginx on every node, expose to host</li>
+      </ul>
+      <pre class="layout-right" style="overflow-y:scroll;">
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: test-daemonset
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      networkMode: host
+      containers:
+      - name: nginx
+        image: nginx:1.21
+      </pre>
+    </div>
+  </slide>
+  <slide title="The (Cron)Job">
+    <div class="layout-1x1">
+      <ul class="layout-left layout-y-centering">
+        <li>Jobs create pods until they complete successfully</li>
+        <li>Completion signalled via exit code.</li>
+        <li>CronJobs create jobs by a time schedule</li>
+        <li>Useful for backups, processing tasks, batch jobs</li>
+      </ul>
+      <pre class="layout-right" style="overflow-y:scroll;">
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: test-cronjob
+spec:
+  # every minute
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: nginx
+            image: busybox
+            command:
+            - "/bin/sh"
+            - "-c"
+            - "date"</pre>
+    </div>
+  </slide>
+  <slide title="The PersistentVolume(Claim)">
+    <div class="layout-1x1">
+      <ul class="layout-left layout-y-centering">
+        <li>Storage in the cloud...</li>
+        <li>Three objects: PVC, PV, StorageClass</li>
+        <li>StorageClass defines types of Persistency (e.g. EBS)</li>
+        <li>PVC requests a certain amount of storage</li>
+        <li>a CSI provisioner then creates the volume and creates a PV object</li>
+        <li>a CSI attacher mounts the PV to the consuming pod</li>
+      </ul>
+      <pre class="layout-right">
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: test-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ebs-gp3
+  resources:
+    requests:
+      storage: 30Gi</pre>
+    </div>
+  </slide>
+  <slide title="HandsOn!">
+    <div class="layout-1"><tty></tty></div>
+  </slide>
+  <slide title="The CustomResourceDefinition">
+    <div class="layout-1">
+      <ul class="layout-y-centering">
+        <li>Kubernetes is <b>extensible</b></li>
+        <li>The apiserver can store and provide the same declarative API for third party components</li>
+        <li>Own objects can be defined via CustomResourceDefinition</li>
+        <li>Extremely powerful concept, used quite frequently, e.g. cert-manager, traefik, rook</li>
+        <li>Related concept: Operator, basically a reconcile loop which reacts to third party resources and acts</li>
+      </ul>
+    </div>
+  </slide>
+</chapter>
+
+<chapter title="Managing Complex Deployments: Helm">
+  <slide title="Helm - Intro">
+    <div class="layout-1x1" style="grid-template-columns: 2fr 1fr;">
+      <ul class="layout-y-centering">
+        <li>Writing tons of manifests manually is cumbersome and error prone</li>
+        <li>e.g. sharing configuration between different manifests</li>
+        <hr>
+        <li>Helm integrates a template engine into kubernetes manifests</li>
+        <li>Allows to package a versioned deployment of entire applications in a single directory</li>
+        <li>Helm allows re-use of already packaged sub-components (e.g. database)</li>
+      </ul>
+      <img src="./assets/automate-all.jpg" class="layout-y-centering" height="500">
+    </div>
+  </slide>
+  <slide title="Anatomy of a helm chart">
+    <div class="layout-1x1">
+      <ul>
+        <li>chart.yaml lists metadata for distribution</li>
+        <li>templates contains files that are <i>rendered</i> (filled with values)</li>
+        <li>values.yaml contains default configuration, can be overridden on install</li>
+        <li>charts contains other helm charts (dependencies)</li>
+      </ul>
+      <pre class="layout-right">
+
+      </pre>
+    </div>
+  </slide>
+  <slide title="Installation of a helm chart">
+    <div class="layout-2">
+      <pre>
+# install a chart
+$ helm install -n NAMESPACE -f values.yaml NAME chart
+# remove from cluster
+$ helm uninstall -n NAMESPACE NAME</pre>
+      <tty></tty>
+    </div>
+  </slide>
+  <slide title="Upgrades/Rollback/Dry-Run">
+    <div class="layout-2">
+      <pre>
+# upgrade a chart
+$ helm upgrade -n NAMESPACE -f values.yaml NAME chart
+# rollback from cluster
+$ helm rollback -n NAMESPACE NAME [REVISION]</pre>
+      <tty></tty>
+    </div>
+  </slide>
+  <slide title="Distribution">
+    <div class="layout-1">
+      <ul>
+        <li>Helm Charts can be grouped and distributed in <b>repositories</b></li>
+        <li>Example: <a href="https://artifacthub.io">https://artifacthub.io</a></li>
+        <li>Helm can directly consume charts from repositories</li>
+        <li>Helm uses the local kubernetes configuration file to find its clusters</li>
+      </ul>
+    </div>
+  </slide>
+</chapter>
+
+<chapter title="Thanks" subtitle="Q/A Time!">
+</chapter>

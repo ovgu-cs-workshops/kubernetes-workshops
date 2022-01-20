@@ -1,0 +1,35 @@
+@import "~normalize.css/normalize";
+@import '~xterm/css/xterm.css';
+
+$text-color: #413000;
+
+body {
+  font-family: "Roboto";
+  color: $text-color;
+  position: fixed;
+  width: 100%;
+}
+
+@import "./styles/fallback";
+@import "./styles/markup";
+@import "./styles/click-fix";
+
+.flex-auto {
+  flex: 1 1 auto;
+}
+
+.space-around {
+  justify-content: space-around;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.step-placeholder {
+  width: 4em;
+}
+
+div.outline {
+  border-top: 4px solid #bf4a38;
+}

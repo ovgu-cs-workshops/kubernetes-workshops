@@ -1,0 +1,26 @@
+<div class="step cornered"
+  [attr.data-x]="chapter * 2100"
+  [attr.data-y]="totalOrder * 1200"
+  [attr.data-scale]="scale">
+  <div class="corners"></div>
+
+  <header>
+    <h1 *ngIf="titleLarge">{{title}}</h1>
+    <h2 *ngIf="!titleLarge">{{title}}</h2>
+  </header>
+
+  <main>
+    <ng-content></ng-content>
+  </main>
+
+  <footer>
+    <section class="left">
+    </section>
+    <section class="center">
+      {{position | async}} / {{slideCount | async}}
+    </section>
+    <section class="right">
+      {{getDate()}}
+    </section>
+  </footer>
+</div>
