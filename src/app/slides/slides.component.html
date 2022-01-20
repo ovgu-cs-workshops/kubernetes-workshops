@@ -205,6 +205,30 @@ spec:
     </div>
   </slide>
 
+  <slide title="Health Checks">
+    <div class="layout-1x1" style="grid-template-columns: 3fr 2fr;">
+      <ul class="layout-y-centering">
+        <li>kubernetes can regularly check containers in pods for their health</li>
+        <li>this can be done e.g. by HTTP request, process execution, etc.</li>
+        <li>Readiness Probes (Pod is fully started up)</li>
+        <li>Liveness Probes (Pod is ready to take requests)</li>
+        <li>When both are good, then the pod enters 'Ready' state and receives requests</li>
+        <li>Unhealthy pods are restarted automatically</li>
+      </ul>
+      <pre>
+# check
+# http://pod:8080/healthz
+# every five seconds
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 5
+      </pre>
+    </div>
+  </slide>
+
   <slide title="The Service">
     <div class="layout-1x1">
       <ul class="layout-left layout-y-centering" style="width:900px">
@@ -450,8 +474,20 @@ spec:
         <li>charts contains other helm charts (dependencies)</li>
       </ul>
       <pre class="layout-right">
-
-      </pre>
+myApp
+|- Chart.yaml
+|- README.md
+|
+|- templates
+||- 001-deployment.yaml
+||- 002-service.yaml
+||- 003-pvc.yaml
+||- NOTES.txt
+|
+|- charts
+||- postgres
+|||- Chart.yaml
+|||- ...</pre>
     </div>
   </slide>
   <slide title="Installation of a helm chart">
@@ -485,6 +521,20 @@ $ helm rollback -n NAMESPACE NAME [REVISION]</pre>
     </div>
   </slide>
 </chapter>
-
+<chapter>
+<slide title="Cloud-Native Application Design">
+  <div class="layout-1">
+    <ul>
+      <li><b>CI &amp; CD</b> workflows constantly update the application</li>
+      <li>Updates, Downgrades, Scaling and internal interfaces should be <b>fully automated</b></li>
+      <li><b>API first</b> - every action must be performable through a specified programming interface</li>
+      <li>Be as <b>stateless</b>  as possible - Applications which hold state are much harder to scale</li>
+      <li>Use <b>replacement services</b> for hard to operate things (e.g. Object Storage, Databases, Queueing)</li>
+      <li><b>Defense in Depth</b> - Every component is designed to not trust other application components</li>
+      <li><b>Isolate dependencies</b> - Ship in containers, don't impose restrictions on the OS or architecture</li>
+      <li>Don't reinvent the wheel, <b>delegate common functionality</b> to well-known solutions, e.g. traefik</li>
+    </ul>
+  </div>
+</slide></chapter>
 <chapter title="Thanks" subtitle="Q/A Time!">
 </chapter>
