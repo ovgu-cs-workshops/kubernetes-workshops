@@ -177,6 +177,47 @@ spec:
 </chapter>
 
 <chapter title="kubernetes objects">
+  <slide title="Metadata / Labels / Annotations">
+    <div class="layout-1">
+      <li>Every kubernetes object has a <b>metadata</b> block.</li>
+      <li>Metadata specifies the type of the object, defines the schema for the remaining object</li>
+      <li>Metadata also <b>always</b> contains <b>Labels</b> and <b>Annotations</b></li>
+      <li>Labels can be used to find or select objects, e.g. all resources belonging to a specific app</li>
+      <li>Makes it easier to manage large deployments</li>
+      <li>Annotations can store additional data, e.g. configuration for tools interacting with kubernetes</li>
+      <li>Frequent use case: annotating cloud provider configuration to kubernetes objects, e.g. EC2 instance ID etc.</li>
+    </div>
+  </slide>
+  <slide title="The Node">
+    <div class="layout-1">
+      <ul class="layout-y-centering">
+        <li>Nodes are physical or virtual compute instances, powering your cluster.</li>
+        <li>A node itself is also just a plain object from kubernetes sight.</li>
+        <li>Nodes have a status (Ready, NotReady, Scheduling Disabled/Enabled)</li>
+        <li>Only nodes that are ready and have scheduling enabled can run workloads.</li>
+        <li>Nodes can have additional <b>taints</b>, preventing certain workloads from running</li>
+      </ul>
+    </div>
+  </slide>
+  <slide title="The Namespace">
+    <div class="layout-1x1">
+      <ul class="layout-left layout-y-centering" style="width:900px">
+        <li>Most objects are <b>namespaced</b></li>
+        <li>Namespaces group related objects</li>
+        <li>Frequently: one application - one namespace</li>
+        <li>Can also enforce administrative and permission boundaries</li>
+        <li>With proper networking setup, can also serve as networking isolation</li>
+      </ul>
+      <pre class="layout-right" style="width:100%">
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-namespace
+  labels:
+    app.kubernetes.io/name: "k8s-workshop"
+</pre>
+    </div>
+  </slide>
   <slide title="The Pod">
     <div class="layout-1x1">
       <ul class="layout-left layout-y-centering" style="width:900px">
@@ -194,7 +235,7 @@ kind: Pod
 metadata:
   name: test-pod
   labels:
-    app: nginx
+    app.kubernetes.io/name: nginx
 spec:
   containers:
   - name: nginx
@@ -438,6 +479,23 @@ spec:
   <slide title="HandsOn!">
     <div class="layout-1"><tty></tty></div>
   </slide>
+
+  <slide title="ServiceAccount & RBAC">
+    <div class="layout-1">
+      <ul class="layout-y-centering">
+        <li>ServiceAccount is an identity for a workload in the cluster.</li>
+        <li>Workloads can also interact with kubernetes, e.g. manage other workloads</li>
+        <li>ServiceAccounts can also be used to authenticate workloads to external services via OIDC.</li>
+        <li>Further: Operator Concept</li>
+        <hr>
+        <li>RBAC defines, who is allowed to perform which actions with the Kubernetes API</li>
+        <li><b>Role</b>: A set of permissions</li>
+        <li><b>RoleBinding</b>: Role assigned to User / ServiceAccount / Group</li>
+        <li><b>ClusterRole/ClusterRoleBinding</b>: Same, but for the entire cluster</li>
+      </ul>
+    </div>
+  </slide>
+
   <slide title="The CustomResourceDefinition">
     <div class="layout-1">
       <ul class="layout-y-centering">
